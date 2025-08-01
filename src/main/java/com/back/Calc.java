@@ -18,7 +18,7 @@ public class Calc {
             if (s.equals("*")) {
                 operator[op_count++] = "*";
             }
-            if (Character.isDigit(s.charAt(0))) {
+            if (Character.isDigit(s.charAt(0)) || Character.isDigit(s.charAt(1))) {
                 num[num_count++] = Integer.parseInt(s);
             }
         }

@@ -12,13 +12,13 @@ public class Calc {
             if (s.equals("+")) {
                 operator[op_count++] = "+";
             }
-            if (s.equals("-")) {
+            else if (s.equals("-")) {
                 operator[op_count++] = "-";
             }
-            if (s.equals("*")) {
+            else if (s.equals("*")) {
                 operator[op_count++] = "*";
             }
-            if (Character.isDigit(s.charAt(0)) || Character.isDigit(s.charAt(1))) {
+            else if (Character.isDigit(s.charAt(0)) || s.charAt(0) == '-') {
                 num[num_count++] = Integer.parseInt(s);
             }
         }

@@ -15,6 +15,9 @@ public class Calc {
             if (s.equals("-")) {
                 operator[op_count++] = "-";
             }
+            if (s.equals("*")) {
+                operator[op_count++] = "*";
+            }
             if (Character.isDigit(s.charAt(0))) {
                 num[num_count++] = Integer.parseInt(s);
             }
@@ -29,6 +32,9 @@ public class Calc {
             }
             else if (operator[i - 1].equals("-")) {
                 sum -= num[i];
+            }
+            else if (operator[i - 1].equals("*")) {
+                sum *= num[i];
             }
         }
 

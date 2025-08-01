@@ -19,23 +19,44 @@ public class Calc {
         int num1 = Integer.parseInt(expressionBit[0]);
         int num2 = Integer.parseInt(expressionBit[2]);
         int num3 = Integer.parseInt(expressionBit[4]);
-
+        int num4 = Integer.parseInt(expressionBit[6]);
         if (operator[0].equals("+")) {
             if (operator[1].equals("+")) {
-                sum += num1 + num2 + num3;
+                if (operator[2].equals("+")) {
+                    sum += num1 + num2 + num3 + num4;
+                }
+                else if (operator[2].equals("-")) {
+                    sum += num1 + num2 + num3 - num4;
+                }
             }
             else if (operator[1].equals("-")) {
-                sum = num1 + num2 - num3;
+                if (operator[2].equals("+")) {
+                    sum += num1 + num2 - num3 + num4;
+                }
+                else if (operator[2].equals("-")) {
+                    sum += num1 + num2 - num3 - num4;
+                }
             }
         }
         if (operator[0].equals("-")) {
             if (operator[1].equals("+")) {
-                sum += num1 - num2 + num3;
+                if (operator[2].equals("+")) {
+                    sum += num1 - num2 + num3 + num4;
+                }
+                else if (operator[2].equals("-")) {
+                    sum += num1 - num2 + num3 - num4;
+                }
             }
             else if (operator[1].equals("-")) {
-                sum = num1 - num2 - num3;
+                if (operator[2].equals("+")) {
+                    sum += num1 - num2 - num3 + num4;
+                }
+                else if (operator[2].equals("-")) {
+                    sum += num1 - num2 - num3 - num4;
+                }
             }
         }
+
 
         return sum;
     }

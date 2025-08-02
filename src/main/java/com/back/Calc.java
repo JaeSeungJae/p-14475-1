@@ -3,7 +3,6 @@ package com.back;
 public class Calc {
     public static int run(String expression) {
         String[] expressionBit = expression.split(" ");
-        int sum = 0;
         int op_count = 0;
         int num_count = 0;
         String[] operator = new String[expressionBit.length];
@@ -11,33 +10,29 @@ public class Calc {
         for (String s : expressionBit) {
             if (s.equals("+")) {
                 operator[op_count++] = "+";
-            }
-            else if (s.equals("-")) {
+            } else if (s.equals("-")) {
                 operator[op_count++] = "-";
-            }
-            else if (s.equals("*")) {
+            } else if (s.equals("*")) {
                 operator[op_count++] = "*";
-            }
-            else if (Character.isDigit(s.charAt(0)) || s.charAt(0) == '-') {
+            } else if (Character.isDigit(s.charAt(0)) || s.charAt(0) == '-') {
                 num[num_count++] = Integer.parseInt(s);
             }
         }
+        return operation(num_count, num, operator, 0, 0);
+    }
 
-        for (int i = 0; i < num_count; i++) {
-            if (i < 1) {
-                sum += num[0];
-            }
-            else if (operator[i - 1].equals("+")) {
-               sum += num[i];
-            }
-            else if (operator[i - 1].equals("-")) {
-                sum -= num[i];
-            }
-            else if (operator[i - 1].equals("*")) {
-                sum *= num[i];
-            }
+    public static int operation(int num_count, int[] num, String[] operator, int count, int sum) {
+        if (count < 1) {
+            sum += num[0];
+        } else if (operator[count - 1].equals("+")) {
+            sum += num[count];
+        } else if (operator[count - 1].equals("-")) {
+            sum -= num[count];
+        } else if (operator[count - 1].equals("*")) {
+            sum *= num[count];
         }
-
-        return sum;
+        count++;
+        if (count < num_count) return operation(num_count, num, operator, count, sum);
+        else return sum;
     }
 }

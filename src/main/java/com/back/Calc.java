@@ -4,33 +4,35 @@ import java.util.ArrayList;
 import java.util.regex.*;
 
 public class Calc {
+
     public static int run(String expression) {
-        Pattern pattern = Pattern.compile("\\(([^)]+)\\)");
+        return evaluate(expression);
+    }
+
+    public static int evaluate(String expression) {
+        // 괄호가 존재하면 가장 안쪽 괄호부터 재귀 처리
+        Pattern pattern = Pattern.compile("\\(([^()]+)\\)");
         Matcher matcher = pattern.matcher(expression);
-        ArrayList<String> extractExpression = new ArrayList<>();
+
         while (matcher.find()) {
-            extractExpression.add(matcher.group(1));
+            String inner = matcher.group(1);         // 괄호 안 식
+            int result = evaluate(inner);            // 재귀적으로 평가
+            expression = expression.replaceFirst(Pattern.quote("(" + inner + ")"), Integer.toString(result));
+            matcher = pattern.matcher(expression);   // 갱신 필요
         }
+
+        // 괄호가 더 이상 없으면 직접 계산
         ArrayList<String> operator = new ArrayList<>();
         ArrayList<Integer> num = new ArrayList<>();
-        for (String exp : extractExpression) {
-            ArrayList<String> operatorTemp = new ArrayList<>();
-            ArrayList<Integer> numTemp = new ArrayList<>();
-            manipulate(exp, numTemp, operatorTemp);
-            while (operatorTemp.stream().anyMatch(op -> op.equals("*"))) {
-                findMul(operatorTemp, numTemp);
-            }
-            num.add(operation(numTemp.size(), numTemp, operatorTemp, 0, 0));
-        }
-
-        String expression2 = expression.replaceAll("\\(([^)]+)\\)", "");
-
-
-        manipulate(expression2, num, operator);
-        while (operator.stream().anyMatch(op -> op.equals("*"))) {
-            findMul(operator, num);
-        }
+        calculate(operator, num, expression);
         return operation(num.size(), num, operator, 0, 0);
+    }
+
+    public static void calculate(ArrayList<String> op, ArrayList<Integer> num, String exp) {
+        manipulate(exp, num, op);
+        while (op.stream().anyMatch(ope -> ope.equals("*"))) {
+            findMul(op, num);
+        }
     }
 
     public static void manipulate(String expression, ArrayList<Integer> num, ArrayList<String> operator) {
@@ -39,13 +41,11 @@ public class Calc {
             if (s.isEmpty()) {
                 continue;
             }
-            if (s.equals("+")) {
-                operator.add("+");
-            } else if (s.equals("-")) {
-                operator.add("-");
-            } else if (s.equals("*")) {
-                operator.add("*");
-            } else if (Character.isDigit(s.charAt(0)) || s.charAt(0) == '-') {
+            s = s.replaceAll("[()]", ""); // 혹시 남아 있을 괄호 제거
+
+            if (s.equals("+") || s.equals("-") || s.equals("*")) {
+                operator.add(s);
+            } else if (Character.isDigit(s.charAt(0)) || (s.length() > 1 && s.charAt(0) == '-' && Character.isDigit(s.charAt(1)))) {
                 num.add(Integer.parseInt(s));
             }
         }
